@@ -1,0 +1,10 @@
+---
+
+- name: Create logstash input file
+  template: src=logstash.conf.j2 dest={{ logstash_conf_dir }}/zabbix-server.conf owner=root group=root mode=0644
+  notify:
+    - restart logstash
+  when: zabbix_server_use_logstash
+  tags:
+    - logstash
+    - zabbix-server

@@ -1,0 +1,44 @@
+---
+
+- name: Install package
+  apt: name={{ zabbix_server_package }} state=present
+  tags:
+    - zabbix-server
+    
+- name: Create MySQL database
+  mysql_db: login_user=root login_password={{ mysql_root_password }} name={{ zabbix_database_name }} state=present encoding=utf8 collation=utf8_bin login_host={{ zabbix_database_host }} login_port={{ zabbix_database_port }}
+  register: new_zabbix_mysql_database
+  tags:
+    - zabbix-server
+    - mysql
+
+- name: Create MySQL user
+  mysql_user: login_user=root login_password={{ mysql_root_password }} name={{ zabbix_database_username }} password={{ zabbix_database_password }} state=present login_host={{ zabbix_database_host }} login_port={{ zabbix_database_port }}
+  tags:
+    - zabbix-server
+    - mysql
+    
+- name: Grant permissions for MySQL user to database
+  mysql_user: login_user=root login_password={{ mysql_root_password }} name={{ zabbix_database_username }} priv="{{ zabbix_database_name}}.*:ALL" login_host={{ zabbix_database_host }} login_port={{ zabbix_database_port }}
+  tags:
+    - zabbix-server
+    - mysql
+    
+- name: Populate MySQL database
+  shell: |
+    zcat /usr/share/zabbix-server-mysql/schema.sql.gz | mysql -h {{ zabbix_database_host }} --port={{ zabbix_database_port }} -u {{ zabbix_database_username }} --password={{ zabbix_database_password }} {{ zabbix_database_name }} &&
+    zcat /usr/share/zabbix-server-mysql/images.sql.gz | mysql -h {{ zabbix_database_host }} --port={{ zabbix_database_port }} -u {{ zabbix_database_username }} --password={{ zabbix_database_password }} {{ zabbix_database_name }} &&
+    zcat /usr/share/zabbix-server-mysql/data.sql.gz   | mysql -h {{ zabbix_database_host }} --port={{ zabbix_database_port }} -u {{ zabbix_database_username }} --password={{ zabbix_database_password }} {{ zabbix_database_name }}
+  when: new_zabbix_mysql_database.changed
+  tags:
+    - zabbix-server
+    - mysql
+
+- name: Create configuration file
+  template: src=zabbix_server.conf.j2 dest=/etc/zabbix/zabbix_server.conf owner=root group=root mode=0644
+  notify:
+    - restart zabbix-server
+  tags:
+    - zabbix-server
+
+- include: logstash.yml

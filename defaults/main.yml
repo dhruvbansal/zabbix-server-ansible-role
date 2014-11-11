@@ -1,0 +1,16 @@
+---
+
+zabbix_server_package: zabbix-server-mysql
+
+zabbix_server_log_dir: /var/log/zabbix-server
+zabbix_server_home_dir: /var/run/zabbix
+
+mysql_root_password:      SET_ME_PLEASE
+zabbix_database_host:     localhost
+zabbix_database_port:     3306
+zabbix_database_username: zabbix
+zabbix_database_password: SET_ME_PLEASE
+zabbix_database_name:     zabbix
+
+zabbix_server_use_logstash: true
+logstash_conf_dir: /etc/logstash/conf.d
