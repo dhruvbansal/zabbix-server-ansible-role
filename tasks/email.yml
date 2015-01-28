@@ -1,0 +1,15 @@
+---
+
+- name: Install sendEmail program
+  apt: name=sendemail state=present
+  tags:
+    - zabbix-server
+    - email
+
+- name: Create email script
+  template: src=zabbixEmail.j2 dest={{ zabbix_server_alert_scripts_dir }}/zabbixEmail owner=root group=root mode=0755
+  tags:
+    - zabbix-server
+    - email
+  when: zabbix_server_email
+  

@@ -439,7 +439,7 @@ DBPort={{ zabbix_database_port }}
 # Default:
 # AlertScriptsPath=${datadir}/zabbix/alertscripts
 
-AlertScriptsPath=/etc/zabbix/alert.d/
+AlertScriptsPath={{ zabbix_server_alert_scripts_dir }}
 
 ### Option: ExternalScripts
 #	Full path to location of external scripts.
@@ -448,6 +448,7 @@ AlertScriptsPath=/etc/zabbix/alert.d/
 # Mandatory: no
 # Default:
 # ExternalScripts=${datadir}/zabbix/externalscripts
+ExternalScripts={{ zabbix_server_external_scripts_dir }}
 
 ### Option: FpingLocation
 #	Location of fping.

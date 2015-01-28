@@ -1,0 +1,9 @@
+#!/bin/bash
+
+FROM_ADDRESS="{{ zabbix_server_email_address }}"
+
+TO_ADDRESS="$1"
+SUBJECT="$2"
+BODY="$3"
+
+exec sendEmail -f "${FROM_ADDRESS}" -t "${TO_ADDRESS}" -u "${SUBJECT}" -m "${BODY}"

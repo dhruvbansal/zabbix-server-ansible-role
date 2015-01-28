@@ -34,6 +34,16 @@
     - zabbix-server
     - mysql
 
+- name: Ensure alert scripts directory exists
+  file: path={{ zabbix_server_alert_scripts_dir }} state=directory mode=0755
+  tags:
+    - zabbix-server
+    
+- name: Ensure external scripts directory exists
+  file: path={{ zabbix_server_external_scripts_dir }} state=directory mode=0755
+  tags:
+    - zabbix-server
+
 - name: Create configuration file
   template: src=zabbix_server.conf.j2 dest=/etc/zabbix/zabbix_server.conf owner=root group=root mode=0644
   notify:
@@ -42,3 +52,4 @@
     - zabbix-server
 
 - include: logstash.yml
+- include: email.yml

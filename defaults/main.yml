@@ -14,3 +14,15 @@ zabbix_database_name:     zabbix
 
 zabbix_server_use_logstash: true
 logstash_conf_dir: /etc/logstash/conf.d
+
+zabbix_server_alert_scripts_dir: /etc/zabbix/alert.d
+zabbix_server_external_scripts_dir: /etc/zabbix/external_scripts
+
+
+zabbix_server_email:          false # set to true to enable email
+zabbix_server_email_address:  zabbix@example.com
+zabbix_server_email_name:     Zabbix
+zabbix_server_email_host:     smtp.example.com
+zabbix_server_email_port:     25 # or 587 for google 
+zabbix_server_email_username: zabbix
+zabbix_server_email_password: password
