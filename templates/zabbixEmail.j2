@@ -1,9 +1,14 @@
 #!/bin/bash
 
-FROM_ADDRESS="{{ zabbix_server_email_address }}"
-
 TO_ADDRESS="$1"
 SUBJECT="$2"
 BODY="$3"
 
-exec sendEmail -f "${FROM_ADDRESS}" -t "${TO_ADDRESS}" -u "${SUBJECT}" -m "${BODY}"
+exec sendEmail -f "{{ zabbix_server_email_address }}" \
+  -t "${TO_ADDRESS}" \
+  -u "${SUBJECT}" \
+  -m "${BODY}"{% if zabbix_server_email_tls %}\
+  -o tls=yes \
+  -s "{{ zabbix_server_email_host }}:{{ zabbix_server_email_port }}" \
+  -xu "{{ zabbix_server_email_username }}" \
+  -xp "{{ zabbix_server_email_password }}"{% endif %}
